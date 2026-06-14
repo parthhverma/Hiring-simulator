@@ -126,9 +126,9 @@ function AnimatedBackground({ scrollY }) {
         if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0
         if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0
         ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${p.opacity * 0.8})`; ctx.fill()
+        ctx.fillStyle = `rgba(147, 197, 253, ${p.opacity * 0.8})`; ctx.fill()
       })
-      particles.forEach((a, i) => { particles.slice(i + 1).forEach(bp => { const dist = Math.hypot(a.x - bp.x, a.y - bp.y); if (dist < 100) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(bp.x, bp.y); ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${0.06 * (1 - dist / 100)})`; ctx.lineWidth = 0.5; ctx.stroke() } }) })
+      particles.forEach((a, i) => { particles.slice(i + 1).forEach(bp => { const dist = Math.hypot(a.x - bp.x, a.y - bp.y); if (dist < 100) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(bp.x, bp.y); ctx.strokeStyle = `rgba(147, 197, 253, ${0.06 * (1 - dist / 100)})`; ctx.lineWidth = 0.5; ctx.stroke() } }) })
       animId = requestAnimationFrame(draw)
     }
     draw()
@@ -219,7 +219,7 @@ function App() {
               </Reveal>
               <Reveal delay={1}>
                 <div className="grid grid-cols-2 gap-4">
-                  {[{ icon: '🧠', title: 'Personalized Questions', desc: 'AI reads your actual resume and asks about your real experience — not generic interview questions.' }, { icon: '🎤', title: 'Voice Input', desc: 'Speak your answers naturally. No typing. The mic listens continuously with a 2-minute timer.' }, { icon: '💬', title: 'Instant Feedback', desc: 'After every answer, the AI gives you honest feedback on what was strong and what to improve.' }, { icon: '⏸', title: 'Stop and Resume AI', desc: 'Interrupt the AI mid-sentence, think, then resume from exactly where it stopped.' }, { icon: '⏱', title: '2 Min Answer Timer', desc: 'A countdown timer appears when you speak. Trains you to give concise, structured answers.' }, { icon: '��', title: 'Final Score', desc: 'After 5 questions, get an overall score out of 10 with a summary of your performance.' }].map((f, i) => (
+                  {[{ icon: '🧠', title: 'Personalized Questions', desc: 'AI reads your actual resume and asks about your real experience — not generic interview questions.' }, { icon: '🎤', title: 'Voice Input', desc: 'Speak your answers naturally. No typing. The mic listens continuously with a 2-minute timer.' }, { icon: '💬', title: 'Instant Feedback', desc: 'After every answer, the AI gives you honest feedback on what was strong and what to improve.' }, { icon: '⏸', title: 'Stop and Resume AI', desc: 'Interrupt the AI mid-sentence, think, then resume from exactly where it stopped.' }, { icon: '⏱', title: '2 Min Answer Timer', desc: 'A countdown timer appears when you speak. Trains you to give concise, structured answers.' }, { icon: '🏆', title: 'Final Score', desc: 'After 5 questions, get an overall score out of 10 with a summary of your performance.' }].map((f, i) => (
                     <div key={i} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/8 hover:border-purple-500/20 transition-all duration-300 flex gap-4">
                       <div className="text-2xl shrink-0">{f.icon}</div>
                       <div><h3 className="text-white font-bold text-sm uppercase tracking-tight mb-1">{f.title}</h3><p className="text-white/40 text-sm leading-relaxed">{f.desc}</p></div>
