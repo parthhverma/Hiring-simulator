@@ -115,15 +115,6 @@ function AnimatedBackground({ scrollY }) {
       ctx.lineWidth = 1
       for (let x = 0; x < canvas.width; x += 80) { const a = 0.02 + 0.02 * Math.sin(t * 0.005 + x * 0.01); ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke() }
       for (let y = 0; y < canvas.height; y += 80) { const a = 0.02 + 0.02 * Math.sin(t * 0.005 + y * 0.01); ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${a})`; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke() }
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy
-        if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0
-        if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(147, 197, 253, ${p.opacity * 0.8})`; ctx.fill()
-      })
-      particles.forEach((a, i) => { particles.slice(i + 1).forEach(bp => { const dist = Math.hypot(a.x - bp.x, a.y - bp.y); if (dist < 100) { ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(bp.x, bp.y); ctx.strokeStyle = `rgba(147, 197, 253, ${0.06 * (1 - dist / 100)})`; ctx.lineWidth = 0.5; ctx.stroke() } }) })
-      animId = requestAnimationFrame(draw)
     }
     draw()
     return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', resize) }
