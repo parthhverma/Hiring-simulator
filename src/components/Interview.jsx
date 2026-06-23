@@ -119,6 +119,16 @@ function Interview({ resumeText }) {
     return data.choices[0].message.content
   }
 
+  const restartInterview = () => {
+    stopSpeaking()
+    stopListening()
+    setMessages([])
+    setUserInput('')
+    setQuestionCount(0)
+    setInterviewStarted(false)
+    setLoading(false)
+  }
+  
   const startInterview = async () => {
     setLoading(true)
     setInterviewStarted(true)
@@ -166,7 +176,7 @@ function Interview({ resumeText }) {
   return (
     <div className="w-full max-w-2xl flex flex-col gap-4">
 
-      {/* Header */}
+{/* Header */}
       <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-500/20 rounded-xl flex items-center justify-center text-xl">👔</div>
@@ -175,12 +185,22 @@ function Interview({ resumeText }) {
             <p className="text-white/40 text-xs">Reading from your resume</p>
           </div>
         </div>
-        {interviewStarted && (
-          <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1">
-            <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
-            <span className="text-blue-400 text-xs font-medium">Q {Math.min(questionCount, 5)} of 5</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {interviewStarted && (
+            <div className="flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></div>
+              <span className="text-blue-400 text-xs font-medium">Q {Math.min(questionCount, 5)} of 5</span>
+            </div>
+          )}
+          {interviewStarted && ( 
+            <button
+              onClick={restartInterview}
+              className="bg-white/5 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 text-xs font-medium px-3 py-1.5 rounded-full transition-all"
+            >
+              ↻ Restart
+            </button>
+          )}
+        </div>
       </div>
 
       {/* AI Speaking Banner */}
