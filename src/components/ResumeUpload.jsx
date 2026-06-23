@@ -7,7 +7,7 @@ function ResumeUpload({ onResumeLoad }) {
   const [status, setStatus] = useState('')
   const [isDragging, setIsDragging] = useState(false)
 
-  const processFile = async (file) => {
+const processFile = async (file) => {
     if (!file || file.type !== 'application/pdf') {
       setStatus('Please upload a PDF file')
       return
@@ -27,8 +27,14 @@ function ResumeUpload({ onResumeLoad }) {
         fullText += content.items.map(item => item.str).join(' ') + '\n'
       }
 
+      const cleanText = fullText.trim()
+      if (cleanText.length < 50) {
+        setStatus('⚠️ Couldn\'t read text from this PDF. It might be a scanned image — please upload a text-based resume.')
+        return
+      }
+
       setStatus('Resume loaded!')
-      onResumeLoad(fullText)
+      onResumeLoad(cleanText)
     } catch (err) {
       setStatus('Error reading PDF. Please try another file.')
     }
