@@ -93,7 +93,9 @@ function Interview({ resumeText }) {
   }
 
   const restartInterview = () => {
-    stopSpeaking()
+    window.speechSynthesis.cancel()
+    setIsSpeaking(false)
+    remainingTextRef.current = ''
     stopListening()
     setMessages([])
     setUserInput('')
