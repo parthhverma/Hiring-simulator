@@ -11,6 +11,7 @@ function Interview({ resumeText }) {
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [timeLeft, setTimeLeft] = useState(120)
   const [isComplete, setIsComplete] = useState(false)
+  const [interviewType, setInterviewType] = useState('general')
   const recognitionRef = useRef(null)
   const timerRef = useRef(null)
   const remainingTextRef = useRef('')
@@ -108,7 +109,7 @@ function Interview({ resumeText }) {
   const startInterview = async () => {
     setLoading(true)
     setInterviewStarted(true)
-    const firstQuestion = await askHiringManager([{ role: 'user', content: 'Please start the interview by introducing yourself briefly and asking your first question.' }], resumeText)
+    const firstQuestion = await askHiringManager([{ role: 'user', content: 'Please start the interview by introducing yourself briefly and asking your first question.' }], resumeText, interviewType)
     setMessages([
       { role: 'user', content: 'Please start the interview by introducing yourself briefly and asking your first question.' },
       { role: 'assistant', content: firstQuestion }
@@ -126,7 +127,7 @@ function Interview({ resumeText }) {
     setMessages(newMessages)
     setUserInput('')
     setLoading(true)
-    const response = await askHiringManager(newMessages, resumeText)
+    const response = await askHiringManager(newMessages, resumeText, interviewType)
     setMessages([...newMessages, { role: 'assistant', content: response }])
     setQuestionCount(prev => prev + 1)
     setLoading(false)
@@ -151,6 +152,12 @@ function Interview({ resumeText }) {
   }, [])
 
   const visibleMessages = messages.filter(m => !(m.role === 'user' && m.content === 'Please start the interview by introducing yourself briefly and asking your first question.'))
+
+  const types = [
+    { id: 'general', label: 'General', icon: '💼' },
+    { id: 'technical', label: 'Technical', icon: '⚙️' },
+    { id: 'behavioral', label: 'Behavioral', icon: '🧠' },
+  ]
 
   return (
     <div className="w-full max-w-2xl flex flex-col gap-4">
@@ -177,6 +184,29 @@ function Interview({ resumeText }) {
         </div>
       </div>
 
+      {/* Interview Type Selector (only before starting) */}
+      {!interviewStarted && (
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+          <p className="text-white/50 text-xs uppercase tracking-widest mb-3 text-center">Choose Interview Type</p>
+          <div className="grid grid-cols-3 gap-2">
+            {types.map(t => (
+              <button
+                key={t.id}
+                onClick={() => setInterviewType(t.id)}
+                className={`flex flex-col items-center gap-1 py-3 rounded-xl border transition-all ${
+                  interviewType === t.id
+                    ? 'bg-blue-500/20 border-blue-500/40 text-white'
+                    : 'bg-white/5 border-white/10 text-white/50 hover:bg-white/10'
+                }`}
+              >
+                <span className="text-xl">{t.icon}</span>
+                <span className="text-xs font-medium">{t.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* AI Speaking Banner */}
       {(isSpeaking || remainingTextRef.current) && (
         <div className="flex items-center justify-between bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-4 py-3 animate-fade-in-up">
@@ -199,7 +229,7 @@ function Interview({ resumeText }) {
         {!interviewStarted && !loading && (
           <div className="flex flex-col items-center justify-center h-48 gap-3">
             <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-2xl">💼</div>
-            <p className="text-white/30 text-sm">Click Start Interview to begin</p>
+            <p className="text-white/30 text-sm">Pick a type and click Start Interview</p>
           </div>
         )}
         {visibleMessages.map((msg, i) => (
@@ -240,7 +270,7 @@ function Interview({ resumeText }) {
       {/* Completion Banner */}
       {isComplete && (
         <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-2xl p-6 text-center animate-fade-in-up">
-          <div className="text-4xl mb-2">��</div>
+          <div className="text-4xl mb-2">🎉</div>
           <h3 className="text-white font-bold text-lg uppercase tracking-tight mb-1">Interview Complete!</h3>
           <p className="text-white/50 text-sm mb-4">Check your score and feedback above. Ready to try again?</p>
           <button onClick={restartInterview} className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-widest transition-all hover:scale-105">↻ New Interview</button>

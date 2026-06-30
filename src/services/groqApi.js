@@ -4,12 +4,19 @@
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const MODEL = 'llama-3.3-70b-versatile'
 
-export async function askHiringManager(conversation, resumeText) {
+const typeInstructions = {
+  general: 'Ask a balanced mix of questions covering their background, motivations, and experience.',
+  technical: 'Focus on technical questions about the skills, tools, and technologies listed on their resume. Ask about how they solved technical problems.',
+  behavioral: 'Focus on behavioral questions using the STAR method — ask about teamwork, conflict, leadership, and handling challenges.'
+}
+
+export async function askHiringManager(conversation, resumeText, interviewType = 'general') {
   const systemPrompt = {
     role: 'system',
-    content: `You are a professional hiring manager conducting a job interview. 
-    You have read the candidate's resume. 
+    content: `You are a professional hiring manager conducting a job interview.
+    You have read the candidate's resume.
     Ask ONE interview question at a time based on their actual experience.
+    ${typeInstructions[interviewType]}
     After they answer, give brief feedback (1-2 sentences) then ask the next question.
     After 5 questions, say "Thank you for your time!" and give an overall score out of 10 with a short summary.
     Keep responses concise and professional.
