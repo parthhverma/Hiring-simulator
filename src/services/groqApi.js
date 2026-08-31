@@ -2,7 +2,7 @@
 // Separating this from components keeps our code clean and reusable
 
 const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const MODEL = 'llama-3.3-70b-versatile'
+const MODEL = 'openai/gpt-oss-120b'
 
 const typeInstructions = {
   general: 'Ask a balanced mix of questions covering their background, motivations, and experience.',
